@@ -16,7 +16,8 @@ $core_version_minor = $core_version_parts[1];
 $core_version_patch = $core_version_parts[2];
 
 $url = 'https://www.drupal.org/api-d7/node.json';
-$url .= '?type=project_release&sort=nid&direction=DESC&field_release_project=3060';
+$url .= '?type=project_release&sort=nid&direction=DESC';
+$url .= '&field_release_project=' . ADSU_DRUPALORG_CORE_ID;
 $url .= '&field_release_version_major=' . $core_version_major;
 $url .= '&field_release_version_minor=' . $core_version_minor;
 
