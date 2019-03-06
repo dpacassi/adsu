@@ -7,8 +7,8 @@ set +o allexport
 
 CURRENT_PATH="$(pwd)"
 
-if [ -z "$PHP_BIN" ]; then
-  PHP_BIN=php
+if [ -z "$ADSU_PHP_BIN" ]; then
+  ADSU_PHP_BIN=php
 fi
 
 # Create the pml.csv file.
@@ -30,9 +30,9 @@ else
 fi
 
 # Retrieve update data for core.
-eval "cd ${CURRENT_PATH} && ${PHP_BIN} ./src/check_for_core_updates.php"
+eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_core_updates.php"
 
 # Retrieve update data per project.
-eval "cd ${CURRENT_PATH} && ${PHP_BIN} ./src/check_for_project_updates.php"
+eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_project_updates.php"
 
 echo "EOF"
