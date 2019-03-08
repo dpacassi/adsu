@@ -39,6 +39,11 @@ function check_for_updates($project_nid, $major_version, $minor_version, $patch_
   $update_available = FALSE;
 
   foreach ($project_releases['list'] as $project_release) {
+    if (get_version_parts($project_release['field_release_version'])[0] != $major_version) {
+      // Not our major version, skip.
+      continue;
+    }
+
     if ($project_release['field_release_version_patch'] <= $patch_version) {
       // We've reached the currently installed patch version of the project
       // without finding any security updates.
