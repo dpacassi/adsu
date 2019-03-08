@@ -53,12 +53,16 @@ if [ -s $UPDATE_FILE ]; then
 
   # Let's run the updates
   cd $ADSU_DRUPAL_UPDATE_PATH && bash $UPDATE_FILE
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush updb -y
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush entup -y
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush cc drush
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush cex -y
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush cr
 
   # Let's run our tests
   # TODO: WIP
 
   # If the tests passed, let's commit everything.
-  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush cex -y
   eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} add ."
   eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} commit -m 'Automatic security updates'"
   eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} push"
