@@ -34,5 +34,3 @@ eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_core_updates.php"
 
 # Retrieve update data per project.
 eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_project_updates.php"
-
-echo "EOF"

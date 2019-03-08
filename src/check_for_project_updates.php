@@ -21,7 +21,9 @@ foreach ($projects as $project) {
         $project_version_parts[2]
       );
 
-      var_dump('Update [' . $project['name'] . ']? ' . ((int) $update_project));
+      if ($update_project) {
+        add_to_update_file($project['name']);
+      }
     }
   }
 }

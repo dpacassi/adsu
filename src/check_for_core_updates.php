@@ -17,4 +17,8 @@ $update_core = check_for_updates(
   $core_version_parts[2]
 );
 
-var_dump('Should I update core? ' . $update_core);
+prepare_update_file();
+
+if ($update_core) {
+  add_to_update_file('core');
+}

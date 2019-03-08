@@ -123,3 +123,14 @@ function get_project_nid($project_name, $project_type) {
 
   return NULL;
 }
+
+function prepare_update_file() {
+  $update_filename = __DIR__ . '/../cache/update.txt';
+  file_put_contents($update_filename, '');
+}
+
+function add_to_update_file($package) {
+  $update_filename = __DIR__ . '/../cache/update.txt';
+  $command = 'composer update drupal/' . $package . ' --with-dependencies' . PHP_EOL;
+  file_put_contents($update_filename, $command, FILE_APPEND);
+}
