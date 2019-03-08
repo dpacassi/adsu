@@ -28,6 +28,18 @@ The script basically does the following:
 7. Commit and push changes
 8. Enjoy a coffee. CI/CD does the rest.
 
+## Example requests
+The script receives the release information from the [Drupal.org API](https://www.drupal.org/drupalorg/docs/api).
+An example requests is e.g.:  
+[https://www.drupal.org/api-d7/node.json?type=project_release&sort=nid&direction=DESC&field_release_project=1538032&field_release_version_major=1&taxonomy_vocabulary_6=7234](https://www.drupal.org/api-d7/node.json?type=project_release&sort=nid&direction=DESC&field_release_project=1538032&field_release_version_major=1&taxonomy_vocabulary_6=7234).
+
+That request receives all Drupal 8 releases for the [EU Cookie Compliance](https://www.drupal.org/project/eu_cookie_compliance) module.
+
+## Caching
+Unfortunately we can't filter by machine names when using the Drupal.org API to receive project releases.
+So we have to receive the Drupal.org **node id** from the project first.
+In order that we don't have to do it every time, the node id is being saved in the cache folder in a file `module_name.nid`.
+
 ## Contribution
 - Pull requests are **welcome**!
 - Question? Feedback? Tensions? Please create an [issue](https://github.com/dpacassi/adsu/issues/new)!

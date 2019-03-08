@@ -7,6 +7,7 @@ require __DIR__ . '/../vendor/autoload.php';
 define('ADSU_DRUPALORG_CORE_ID', 3060);
 define('ADSU_DRUPALORG_SECURITY_UPDATES_VOCABULARY', 'taxonomy_vocabulary_7');
 define('ADSU_DRUPALORG_SECURITY_UPDATES_TERM_ID', 100);
+define('ADSU_DRUPALORG_DRUPAL8_TERM_ID', 7234);
 
 /**
  * Checks with the drupal.org API if there is an update available for a
@@ -36,6 +37,8 @@ function check_for_updates($project_nid, $major_version, $minor_version, $patch_
   else {
     // Contrib projects on drupal.org are stored differently
     $url .= '&field_release_version_major=' . $minor_version;
+    // Filter for Drupal 8 projects.
+    $url .= '&taxonomy_vocabulary_6=' . ADSU_DRUPALORG_DRUPAL8_TERM_ID;
   }
 
   $project_releases = json_decode(file_get_contents($url), TRUE);
