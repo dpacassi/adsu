@@ -25,8 +25,15 @@ function check_for_updates($project_nid, $major_version, $minor_version, $patch_
   $url = 'https://www.drupal.org/api-d7/node.json';
   $url .= '?type=project_release&sort=nid&direction=DESC';
   $url .= '&field_release_project=' . $project_nid;
-  $url .= '&field_release_version_major=' . $major_version;
-  $url .= '&field_release_version_minor=' . $minor_version;
+
+  if ($project_nid === ADSU_DRUPALORG_CORE_ID) {
+    $url .= '&field_release_version_major=' . $major_version;
+    $url .= '&field_release_version_minor=' . $minor_version;
+  }
+  else {
+    // Contrib projects on drupal.org are stored differently
+    $url .= '&field_release_version_major=' . $minor_version;
+  }
 
   $project_releases = json_decode(file_get_contents($url), TRUE);
   $update_available = FALSE;
@@ -71,4 +78,43 @@ function get_version_parts($version) {
   }
 
   return $version_parts;
+}
+
+/**
+ * Returns the drupal.org node id for a specific project.
+ *
+ * @param $project_type
+ *   The project type, e.g. 'module' or 'theme'.
+ * @param $project_name
+ *   The project machine name, e.g. 'webform'.
+ *
+ * @return int|null
+ *   The project's drupal.org node id or NULL if not found.
+ */
+function get_project_nid($project_name, $project_type) {
+  // Prepend 'project' for drupal.org.
+  $project_type = 'project_' . $project_type;
+
+  // Check if we have cached the drupal.org nid for this project.
+  $project_filename = __DIR__ . '/../cache/' . $project_name . '.nid';
+
+  if (file_exists($project_filename)) {
+    return file_get_contents($project_filename);
+  }
+
+  $url = 'https://www.drupal.org/api-d7/node.json?type=' . $project_type;
+  $url .= '&field_project_machine_name=' . $project_name;
+
+  $project_json = json_decode(file_get_contents($url), TRUE);
+
+  if (!empty($project_json['list'])) {
+    $project_nid = $project_json['list'][0]['nid'];
+
+    // Cache the project nid.
+    file_put_contents($project_filename, $project_nid);
+
+    return $project_nid;
+  }
+
+  return NULL;
 }
