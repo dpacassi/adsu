@@ -16,7 +16,7 @@ if [ -z "$ADSU_GIT_BIN" ]; then
   ADSU_GIT_BIN=git
 fi
 
-# Create the pml.csv file.
+# Create the pml.json file.
 if [ ! -z "$ADSU_DRUPAL_PRODUCTION_PATH" ]; then
   cd $ADSU_DRUPAL_PRODUCTION_PATH && ./vendor/bin/drush pml --format=json --status=enabled --no-core --fields="name,type,version" > "$CURRENT_PATH"/cache/pml.json
   cd $ADSU_DRUPAL_PRODUCTION_PATH && ./vendor/bin/drush status | grep "Drupal version" > "$CURRENT_PATH"/cache/core.info
