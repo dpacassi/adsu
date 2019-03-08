@@ -1,5 +1,8 @@
 <?php
 
+// Composer.
+require __DIR__ . '/../vendor/autoload.php';
+
 // Static.
 define('ADSU_DRUPALORG_CORE_ID', 3060);
 define('ADSU_DRUPALORG_SECURITY_UPDATES_VOCABULARY', 'taxonomy_vocabulary_7');
@@ -131,6 +134,17 @@ function prepare_update_file() {
 
 function add_to_update_file($package) {
   $update_filename = __DIR__ . '/../cache/update.txt';
-  $command = 'composer update drupal/' . $package . ' --with-dependencies' . PHP_EOL;
+  $command = adsu_get_env('ADSU_COMPOSER_BIN', 'composer');
+  $command .= ' update drupal/' . $package . ' --with-dependencies' . PHP_EOL;
   file_put_contents($update_filename, $command, FILE_APPEND);
+}
+
+function adsu_get_env($env, $default=NULL) {
+  $env = getenv($env);
+
+  if (empty($env) && !empty($default)) {
+    $env = $default;
+  }
+
+  return $env;
 }

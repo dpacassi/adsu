@@ -3,3 +3,6 @@
 
 # Ignore cache.
 cache
+
+# Ignore vendor.
+vendor
