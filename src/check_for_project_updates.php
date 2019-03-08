@@ -1,5 +1,8 @@
 <?php
 
+// Includes.
+require_once 'func.inc.php';
+
 // Read pml.json file.
 $projects = json_decode(file_get_contents(__DIR__ . '/../cache/pml.json'), TRUE);
 
@@ -12,10 +15,20 @@ foreach ($projects as $project) {
     $url .= '&field_project_machine_name=' . $project['name'];
 
     $project_json = json_decode(file_get_contents($url), TRUE);
-    $project_nid = $project_json['list'][0]['nid'];
 
-    var_dump($project_nid);
+    if (!empty($project_json['list'])) {
+      $project_nid = $project_json['list'][0]['nid'];
+      $project_version_parts = get_version_parts($project['version']);
+      $update_project = check_for_updates(
+        $project_nid,
+        $project_version_parts[0],
+        $project_version_parts[1],
+        $project_version_parts[2]
+      );
 
-    break;
+      var_dump($update_project);
+
+      break;
+    }
   }
 }
