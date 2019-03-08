@@ -6,9 +6,14 @@ set -o allexport
 set +o allexport
 
 CURRENT_PATH="$(pwd)"
+UPDATE_FILE="$(pwd)/cache/update.txt"
 
 if [ -z "$ADSU_PHP_BIN" ]; then
   ADSU_PHP_BIN=php
+fi
+
+if [ -z "$ADSU_GIT_BIN" ]; then
+  ADSU_GIT_BIN=git
 fi
 
 # Create the pml.csv file.
@@ -34,3 +39,27 @@ eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_core_updates.php"
 
 # Retrieve update data per project.
 eval "cd ${CURRENT_PATH} && ${ADSU_PHP_BIN} ./src/check_for_project_updates.php"
+
+# Check if we need to update core or any project.
+if [ -s $UPDATE_FILE ]; then
+  # We have some updates to do.
+
+  # Clean up our git repo.
+  eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} add ."
+  eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} reset --hard"
+
+  # Let's sync the database and files from prod.
+  # TODO: WIP
+
+  # Let's run the updates
+  cd $ADSU_DRUPAL_UPDATE_PATH && bash $UPDATE_FILE
+
+  # Let's run our tests
+  # TODO: WIP
+
+  # If the tests passed, let's commit everything.
+  cd $ADSU_DRUPAL_UPDATE_PATH && ./vendor/bin/drush cex -y
+  eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} add ."
+  eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} commit -m 'Automatic security updates'"
+  eval "cd ${ADSU_DRUPAL_UPDATE_PATH} && ${ADSU_GIT_BIN} push"
+fi
